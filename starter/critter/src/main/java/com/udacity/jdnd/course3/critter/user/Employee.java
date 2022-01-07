@@ -8,11 +8,13 @@ import java.util.Set;
 @Entity
 public class Employee {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
     @ElementCollection
+    @Enumerated(EnumType.STRING)
     private Set<EmployeeSkill> skills;
     @ElementCollection
+    @Enumerated(EnumType.STRING)
     private Set<DayOfWeek> daysAvailable;
 }

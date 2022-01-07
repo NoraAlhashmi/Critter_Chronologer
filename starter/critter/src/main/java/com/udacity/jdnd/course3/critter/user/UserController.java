@@ -1,8 +1,10 @@
 package com.udacity.jdnd.course3.critter.user;
-
+import com.udacity.jdnd.course3.critter.pet.Pet;
+import com.udacity.jdnd.course3.critter.pet.PetDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -16,14 +18,35 @@ import java.util.Set;
 @RequestMapping("/user")
 public class UserController {
 
+    @Autowired
+    private CustomerService customerService;
+
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
-        throw new UnsupportedOperationException();
+        CustomerDTO customerDTOResult;
+        //try {
+        Customer customer = customerService.saveCustomer(new Customer(customerDTO.getName(),customerDTO.getPhoneNumber(),customerDTO.getNotes()));
+        customerDTOResult = convertCustomer(customer);
+//        } catch (Exception exception){
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error saving customer", exception);
+//        }
+        return customerDTOResult;
     }
+
+
 
     @GetMapping("/customer")
     public List<CustomerDTO> getAllCustomers(){
-        throw new UnsupportedOperationException();
+        List<CustomerDTO> customerDTOList = new ArrayList<>();
+        //   try {
+        List<Customer> customers = customerService.getCustomers();
+        for (Customer customer : customers) {
+            customerDTOList.add(convertCustomer(customer));
+        }
+//        } catch (Exception exception){
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error retrieving all customer", exception);
+//        }
+        return customerDTOList;
     }
 
     @GetMapping("/customer/pet/{petId}")
@@ -49,6 +72,23 @@ public class UserController {
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
         throw new UnsupportedOperationException();
+    }
+
+    private CustomerDTO convertCustomer(Customer customer) {
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setId(customer.getId());
+        customerDTO.setName(customer.getName());
+        customerDTO.setPhoneNumber(customer.getPhoneNumber());
+        customerDTO.setNotes(customer.getNotes());
+        List<Pet> pets = customer.getPets();
+        List<Long> petIds = new ArrayList<>();
+        if (pets!=null) {
+            for (Pet pet : pets) {
+                petIds.add(pet.getId());
+            }
+        }
+        customerDTO.setPetIds(petIds);
+        return customerDTO;
     }
 
 }

@@ -10,8 +10,10 @@ import java.time.LocalDate;
 public class Pet {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Enumerated(EnumType.STRING)
     private PetType type;
     private String name;
 
@@ -20,6 +22,9 @@ public class Pet {
 
     private LocalDate birthDate;
     private String notes;
+
+    public Pet() {
+    }
 
     public Pet(PetType type, String name, LocalDate birthDate, String notes) {
         this.type = type;

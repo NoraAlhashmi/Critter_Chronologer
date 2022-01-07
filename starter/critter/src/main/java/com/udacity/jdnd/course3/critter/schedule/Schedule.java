@@ -14,14 +14,15 @@ import java.util.Set;
 public class Schedule {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToMany
+    @ManyToMany(targetEntity = Employee.class)
     private List<Employee> employees;
 
-    @ManyToMany
+    @ManyToMany(targetEntity = Pet.class)
     private List<Pet> pets;
+
     private LocalDate date;
 
     @ElementCollection

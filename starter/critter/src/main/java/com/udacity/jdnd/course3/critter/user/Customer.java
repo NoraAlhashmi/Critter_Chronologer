@@ -10,14 +10,23 @@ import java.util.List;
 public class Customer {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
     private String phoneNumber;
     private String notes;
 
-    @OneToMany (targetEntity = Pet.class)
+    @OneToMany (mappedBy = "customer", targetEntity = Pet.class)
     private List<Pet> pets;
+
+    public Customer() {
+    }
+
+    public Customer(String name, String phoneNumber, String notes) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.notes = notes;
+    }
 
     public long getId() {
         return id;

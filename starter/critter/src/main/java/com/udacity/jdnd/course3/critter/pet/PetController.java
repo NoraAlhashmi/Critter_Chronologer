@@ -21,54 +21,53 @@ public class PetController {
     @PostMapping
     public PetDTO savePet(@RequestBody PetDTO petDTO)  {
         PetDTO result;
-        //try {
+        try {
             Pet pet = petService.savePet(new Pet(petDTO.getType(), petDTO.getName(), petDTO.getBirthDate(), petDTO.getNotes()), petDTO.getOwnerId());
             result = convertPet(pet);
-//        } catch (Exception exception){
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error saving pet", exception);
-//        }
+        } catch (Exception exception){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error saving pet", exception);
+        }
         return result;
     }
 
     @GetMapping("/{petId}")
     public PetDTO getPet(@PathVariable long petId) {
         PetDTO result;
-     //   try {
+        try {
         Pet pet = petService.getPetById(petId);
         result = convertPet(pet);
-//        } catch (Exception exception){
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error saving pet", exception);
-//        }
+        } catch (Exception exception){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error getting pet", exception);
+        }
         return result;
     }
 
     @GetMapping
     public List<PetDTO> getPets(){
         List<PetDTO> result = new ArrayList<>();
-        //   try {
+           try {
         List<Pet> pets = petService.getPets();
         System.out.println("list of all pets:" + result == null?"there's at least one pet":"null");
         for (Pet pet : pets) {
             result.add(convertPet(pet));
         }
-//        } catch (Exception exception){
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error saving pet", exception);
-//        }
+        } catch (Exception exception){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error getting all pets", exception);
+        }
         return result;
     }
 
     @GetMapping("/owner/{ownerId}")
     public List<PetDTO> getPetsByOwner(@PathVariable long ownerId) {
         List<PetDTO> result = new ArrayList<>();
-        //   try {
+           try {
         List<Pet> pets = petService.getPetsByCustomerId(ownerId);
-        System.out.println("list of all pets by owner:" + result == null?"there's at least one pet":"null");
         for (Pet pet : pets) {
             result.add(convertPet(pet));
         }
-//        } catch (Exception exception){
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error saving pet", exception);
-//        }
+        } catch (Exception exception){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error getting pets by owner", exception);
+        }
         return result;
     }
 
