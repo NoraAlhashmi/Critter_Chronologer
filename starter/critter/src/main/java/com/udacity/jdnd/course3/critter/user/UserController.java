@@ -25,6 +25,8 @@ public class UserController {
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private EmployeeService employeeService;
 
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
@@ -68,22 +70,52 @@ public class UserController {
 
     @PostMapping("/employee")
     public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
-        throw new UnsupportedOperationException();
+        EmployeeDTO employeeDTOResult;
+        try {
+            Employee employee = employeeService.saveEmployee(new Employee(employeeDTO.getName(),employeeDTO.getSkills(),employeeDTO.getDaysAvailable()));
+            employeeDTOResult = convertEmployee(employee);
+
+        } catch (Exception exception){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error saving employee", exception);
+        }
+        return employeeDTOResult;
     }
+
+
 
     @PostMapping("/employee/{employeeId}")
     public EmployeeDTO getEmployee(@PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
+        EmployeeDTO employeeDTO;
+        try {
+            Employee employee = employeeService.getEmployeeById(employeeId);
+            employeeDTO = convertEmployee(employee);
+        } catch (Exception exception){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error getting employee", exception);
+        }
+        return employeeDTO;
     }
 
     @PutMapping("/employee/{employeeId}")
     public void setAvailability(@RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
+        try {
+            employeeService.setAvailability(daysAvailable,employeeId);
+        } catch (Exception exception){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error saving employee availability", exception);
+        }
     }
 
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-        throw new UnsupportedOperationException();
+        List<EmployeeDTO> employeeDTOS= new ArrayList<>();
+        try {
+            List<Employee> employees = employeeService.findEmployeesForService(employeeDTO.getDate(),employeeDTO.getSkills());
+            for (Employee employee : employees){
+                employeeDTOS.add(convertEmployee(employee));
+            }
+        } catch (Exception exception){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error retrieving available employee", exception);
+        }
+        return employeeDTOS;
     }
 
     private CustomerDTO convertCustomer(Customer customer) {
@@ -96,11 +128,23 @@ public class UserController {
         List<Long> petIds = new ArrayList<>();
         if (pets!=null) {
             for (Pet pet : pets) {
-                petIds.add(pet.getId());
-            }
+                petIds.add(pet.getId());}
         }
         customerDTO.setPetIds(petIds);
         return customerDTO;
+    }
+
+    private EmployeeDTO convertEmployee(Employee employee) {
+        System.out.println("convertEmployee");
+
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        employeeDTO.setId(employee.getId());
+        employeeDTO.setName(employee.getName());
+        employeeDTO.setSkills(employee.getSkills());
+        employeeDTO.setDaysAvailable(employee.getDaysAvailable());
+        System.out.println("convertedEmployee name = "+employeeDTO.getName());
+
+        return employeeDTO;
     }
 
 }
