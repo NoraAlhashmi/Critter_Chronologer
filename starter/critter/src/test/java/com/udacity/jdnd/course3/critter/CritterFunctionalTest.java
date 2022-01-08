@@ -92,19 +92,13 @@ public class CritterFunctionalTest {
         CustomerDTO customerDTO = createCustomerDTO();
         CustomerDTO newCustomer = userController.saveCustomer(customerDTO);
 
-        System.out.println(newCustomer.getId()+" "+newCustomer.getName()+" "+newCustomer.getNotes());
-
         PetDTO petDTO = createPetDTO();
         petDTO.setOwnerId(newCustomer.getId());
         PetDTO newPet = petController.savePet(petDTO);
 
-        System.out.println(newPet.getId()+" "+newPet.getName()+" "+newPet.getOwnerId());
-
         petDTO.setType(PetType.DOG);
         petDTO.setName("DogName");
         PetDTO newPet2 = petController.savePet(petDTO);
-
-        System.out.println(newPet2.getId()+" "+newPet2.getName()+" "+newPet2.getOwnerId());
 
 
         List<PetDTO> pets = petController.getPetsByOwner(newCustomer.getId());
