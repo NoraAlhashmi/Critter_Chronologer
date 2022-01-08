@@ -20,14 +20,14 @@ public class PetController {
 
     @PostMapping
     public PetDTO savePet(@RequestBody PetDTO petDTO)  {
-        PetDTO result;
+        PetDTO petDTOResult;
         try {
             Pet pet = petService.savePet(new Pet(petDTO.getType(), petDTO.getName(), petDTO.getBirthDate(), petDTO.getNotes()), petDTO.getOwnerId());
-            result = convertPet(pet);
+            petDTOResult = convertPet(pet);
         } catch (Exception exception){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error saving pet", exception);
         }
-        return result;
+        return petDTOResult;
     }
 
     @GetMapping("/{petId}")

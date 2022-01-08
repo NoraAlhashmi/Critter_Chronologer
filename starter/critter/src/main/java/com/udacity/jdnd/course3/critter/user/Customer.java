@@ -3,6 +3,7 @@ package com.udacity.jdnd.course3.critter.user;
 import com.udacity.jdnd.course3.critter.pet.Pet;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Table
@@ -26,6 +27,7 @@ public class Customer {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.notes = notes;
+        this.pets = new ArrayList<>();
     }
 
     public long getId() {

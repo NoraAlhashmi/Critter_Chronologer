@@ -28,4 +28,51 @@ public class Schedule {
     @ElementCollection
     private Set<EmployeeSkill> activities;
 
+    public Schedule() {
+    }
+
+    public Schedule(LocalDate date, Set<EmployeeSkill> activities) {
+        this.date = date;
+        this.activities = activities;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+    }
+
+    public List<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(List<Pet> pets) {
+        this.pets = pets;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public Set<EmployeeSkill> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(Set<EmployeeSkill> activities) {
+        this.activities = activities;
+    }
 }
