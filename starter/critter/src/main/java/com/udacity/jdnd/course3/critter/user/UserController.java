@@ -1,8 +1,12 @@
 package com.udacity.jdnd.course3.critter.user;
 import com.udacity.jdnd.course3.critter.pet.Pet;
 import com.udacity.jdnd.course3.critter.pet.PetDTO;
+import com.udacity.jdnd.course3.critter.pet.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +25,16 @@ public class UserController {
     @Autowired
     private CustomerService customerService;
 
+
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
         CustomerDTO customerDTOResult;
-        //try {
+        try {
         Customer customer = customerService.saveCustomer(new Customer(customerDTO.getName(),customerDTO.getPhoneNumber(),customerDTO.getNotes()));
         customerDTOResult = convertCustomer(customer);
-//        } catch (Exception exception){
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error saving customer", exception);
-//        }
+        } catch (Exception exception){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error saving customer", exception);
+        }
         return customerDTOResult;
     }
 
@@ -38,20 +43,27 @@ public class UserController {
     @GetMapping("/customer")
     public List<CustomerDTO> getAllCustomers(){
         List<CustomerDTO> customerDTOList = new ArrayList<>();
-        //   try {
+           try {
         List<Customer> customers = customerService.getCustomers();
         for (Customer customer : customers) {
             customerDTOList.add(convertCustomer(customer));
         }
-//        } catch (Exception exception){
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error retrieving all customer", exception);
-//        }
+        } catch (Exception exception){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error retrieving all customer", exception);
+        }
         return customerDTOList;
     }
 
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId){
-        throw new UnsupportedOperationException();
+        CustomerDTO customerDTOResult;
+        try {
+        Customer customer = customerService.getCustomerByPet(petId);
+        customerDTOResult = convertCustomer(customer);
+        } catch (Exception exception){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error saving customer", exception);
+        }
+        return customerDTOResult;
     }
 
     @PostMapping("/employee")
