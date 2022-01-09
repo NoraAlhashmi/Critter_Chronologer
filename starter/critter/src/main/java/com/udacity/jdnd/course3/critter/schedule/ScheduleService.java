@@ -5,6 +5,8 @@ import com.udacity.jdnd.course3.critter.pet.PetRepository;
 import com.udacity.jdnd.course3.critter.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +26,7 @@ public class ScheduleService {
     private CustomerRepository customerRepository;
 
 
-
+    @Transactional
     public Schedule saveSchedule(Schedule schedule, List<Long> employeeIds, List<Long> petIds) {
         List<Employee> employees = employeeRepository.findAllById(employeeIds);
         schedule.setEmployees(employees);
@@ -40,6 +42,7 @@ public class ScheduleService {
         return schedules;
     }
 
+    @Transactional
     public List<Schedule> getScheduleForPet(long petId) {
         Optional<Pet> pet = petRepository.findById(petId);
         if(!pet.isPresent()){
@@ -50,6 +53,7 @@ public class ScheduleService {
         return  schedules;
     }
 
+    @Transactional
     public List<Schedule> getScheduleForEmployee(long employeeId) {
         Optional<Employee> employee = employeeRepository.findById(employeeId);
         if(!employee.isPresent()){
@@ -59,6 +63,7 @@ public class ScheduleService {
         return  schedules;
     }
 
+    @Transactional
     public List<Schedule> getScheduleForCustomer(long customerId) {
         Optional<Customer> customer = customerRepository.findById(customerId);
         if(!customer.isPresent()){

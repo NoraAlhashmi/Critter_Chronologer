@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ public class PetService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Transactional
     public Pet savePet(Pet pet, long ownerId) {
         Customer customer = customerRepository.getOne(ownerId);
         System.out.println("customer ID= "+customer.getId());

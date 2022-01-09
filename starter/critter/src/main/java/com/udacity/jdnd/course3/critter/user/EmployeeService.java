@@ -31,6 +31,7 @@ public class EmployeeService {
     }
 
 
+
     public void setAvailability(Set<DayOfWeek> daysAvailable, long employeeId) {
         Optional<Employee> employee = employeeRepository.findById(employeeId);
         if (employee.isPresent()){
