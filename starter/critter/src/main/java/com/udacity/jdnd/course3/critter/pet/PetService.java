@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class PetService {
 
     @Autowired
@@ -19,7 +20,6 @@ public class PetService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    @Transactional
     public Pet savePet(Pet pet, long ownerId) {
         Customer customer = customerRepository.getOne(ownerId);
         System.out.println("customer ID= "+customer.getId());
